@@ -35,7 +35,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="listaFilmes"
         options={{
-          title: 'Listagem de Filmes',
+          title: 'Filmes',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="listaBebidas"
+        options={{
+          title: 'Bebidas',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
