@@ -4,6 +4,11 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## Get started
 
+Create the `.env` file.
+```
+cp .env.example .env
+```
+
 1. Install dependencies
 
    ```bash

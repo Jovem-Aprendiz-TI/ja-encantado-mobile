@@ -12,7 +12,7 @@ export default function BebidasScreen() {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://192.168.0.174:3000/bebidas');
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/bebidas`);
             const json = await response.json();
             setData(json);
         } catch (error) {
@@ -91,19 +91,19 @@ const styles = StyleSheet.create({
         flexShrink: 1,
     },
     botaoRefresh: {
-        position: 'absolute', 
-        right: 20, 
-        bottom: 30, 
-        width: 60, 
-        height: 60, 
-        backgroundColor: '#000', 
-        borderRadius: 30, 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        elevation: 5, 
-        shadowColor: '#000', 
-        shadowOffset: { width: 0, height: 2 }, 
-        shadowOpacity: 0.8, 
+        position: 'absolute',
+        right: 20,
+        bottom: 30,
+        width: 60,
+        height: 60,
+        backgroundColor: '#000',
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.8,
         shadowRadius: 2,
     }
 })
