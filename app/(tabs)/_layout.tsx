@@ -41,6 +41,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="bebidas/cadastraBebidas"
+        options={{
+          title: 'Cadastra Bebidas',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'beer' : 'beer-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
