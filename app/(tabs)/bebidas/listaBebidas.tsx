@@ -1,6 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList, RefreshControl, Image, TouchableOpacity } from 'react-native';
+import BebidaItem from '@/components/BebidaItem';
+import RefreshButton from '@/components/RefreshButton';
+import Header from '@/components/Header';
 
 export default function BebidasScreen() {
     const [DATA, setData] = useState<any[]>([]);
@@ -20,36 +23,48 @@ export default function BebidasScreen() {
         }
     }
 
-    const onRefresh = async () => {
+    const handleRefresh = async () => {
         setRefreshing(true);
         await fetchData();
         setRefreshing(false);
     }
 
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/bebidas/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                await handleRefresh();
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.capa}
-                source={{ uri: 'https://cdn.pixabay.com/photo/2013/11/12/01/29/bar-209148_640.jpg' }}
+            <Header
+                url='https://cdn.pixabay.com/photo/2013/11/12/01/29/bar-209148_640.jpg'
+                title="Listagem de bebidas"
             />
-            <View style={styles.containerCabecalho}>
-                <Text style={styles.cabecalho}>Listagem de bebidas</Text>
-            </View>
             <FlatList
                 style={styles.containerLista}
                 data={DATA}
                 renderItem={({ item }) => (
-                    <View style={styles.itemContainer}>
-                        <Text style={styles.textoLista}>{item.nome} - {item.cor}</Text>
-                    </View>
+                    <BebidaItem
+                        id={item.id}
+                        nome={item.nome}
+                        cor={item.cor}
+                        onDelete={handleDelete}
+                    />
                 )}
                 ListEmptyComponent={<Text>Nenhum dado encontrado.</Text>}
                 keyExtractor={item => item.id}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
             />
-            <TouchableOpacity style={styles.botaoRefresh} onPress={onRefresh}>
-                <Ionicons name="refresh" size={24} color="white" />
-            </TouchableOpacity>
+            <RefreshButton onRefresh={handleRefresh} />
         </View>
     )
 }
@@ -64,46 +79,4 @@ const styles = StyleSheet.create({
     containerLista: {
         padding: 20,
     },
-    containerCabecalho: {
-        alignItems: 'center',
-    },
-    cabecalho: {
-        color: '#FFF',
-        fontSize: 30,
-        fontWeight: 'bold',
-    },
-    capa: {
-        width: '100%',
-        height: 200,
-        marginBottom: 10,
-    },
-    itemContainer: {
-        flexDirection: 'row',
-        backgroundColor: '#555',
-        borderRadius: 8,
-        padding: 10,
-        marginBottom: 15,
-        alignItems: 'center',
-    },
-    textoLista: {
-        color: '#FFF',
-        fontSize: 18,
-        flexShrink: 1,
-    },
-    botaoRefresh: {
-        position: 'absolute',
-        right: 20,
-        bottom: 30,
-        width: 60,
-        height: 60,
-        backgroundColor: '#000',
-        borderRadius: 30,
-        justifyContent: 'center',
-        alignItems: 'center',
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-    }
 });

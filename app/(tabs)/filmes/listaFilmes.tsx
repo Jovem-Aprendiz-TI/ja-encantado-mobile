@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, FlatList, TextInput, Image } from 'react-native';
+import Header from '@/components/Header';
 
 const DATA = [
   { id: '1', descricao: 'O Poderoso Chefão', capa: 'https://upload.wikimedia.org/wikipedia/en/1/1c/Godfather_ver1.jpg' },
@@ -29,13 +30,11 @@ export default function FilmesScreen() {
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.capa}
-        source={{ uri: 'https://s4.static.brasilescola.uol.com.br/be/2024/01/sala-de-cinema-cheia-de-pessoas-um-reflexo-da-popularizacao-do-cinema-parte-importante-de-sua-historia.jpg' }}
+      <Header
+        url='https://s4.static.brasilescola.uol.com.br/be/2024/01/sala-de-cinema-cheia-de-pessoas-um-reflexo-da-popularizacao-do-cinema-parte-importante-de-sua-historia.jpg'
+        title="Lista de filmes"
       />
-      <View style={styles.containerCabecalho}>
-        <Text style={styles.cabecalho}>Lista de Filmes</Text>
-      </View>
+
       <TextInput
         style={styles.input}
         value={search}
@@ -67,20 +66,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#3c3c3c',
     justifyContent: 'flex-start',
     marginTop: 30,
-  },
-  containerCabecalho: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  capa: {
-    width: '100%',
-    height: 200,
-    marginBottom: 10,
-  },
-  cabecalho: {
-    color: '#FFF',
-    fontSize: 30,
-    fontWeight: 'bold',
   },
   input: {
     height: 40,
