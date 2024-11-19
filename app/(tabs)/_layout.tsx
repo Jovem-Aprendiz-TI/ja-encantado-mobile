@@ -13,7 +13,12 @@ export default function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-      }}>
+        tabBarStyle: {
+          backgroundColor: '#3c3c3c',
+        },
+        tabBarInactiveTintColor: '#888',
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -46,7 +51,7 @@ export default function TabLayout() {
         options={{
           title: 'Cadastra Bebidas',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'beer' : 'beer-outline'} color={color} />
+            <TabBarIcon name={focused ? 'add-circle' : 'add-circle-outline'} color={color} />
           ),
         }}
       />

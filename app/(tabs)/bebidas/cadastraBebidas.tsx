@@ -1,117 +1,183 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 export default function CadastraBebidas() {
-    const [nome, setNome] = useState('');
-    const [cor, setCor] = useState('');
-    const [quantidade, setQuantidade] = useState('');
-    const [teorAlcool, setTeorAlcool] = useState('');
-    const [temperatura, setTemperatura] = useState('');
+  const router = useRouter();
+  const params = useLocalSearchParams<{ id?: string }>();
 
-    const handleSubmit = async () => {
+  const [bebidaId, setBebidaId] = useState<string | undefined>(params.id);
+  const [nome, setNome] = useState('');
+  const [cor, setCor] = useState('');
+  const [quantidade, setQuantidade] = useState('');
+  const [teorAlcool, setTeorAlcool] = useState('');
+  const [temperatura, setTemperatura] = useState('');
+
+  useEffect(() => {
+    if (params.id) {
+      setBebidaId(params.id);
+      const fetchBebida = async () => {
         try {
-            await fetch(`${process.env.EXPO_PUBLIC_API_URL}/bebidas`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    "nome": nome,
-                    "cor": cor,
-                    "quantidade": quantidade,
-                    "teorAlcool": teorAlcool,
-                    "temperatura": temperatura
-                })
-            });
-
-            setNome('');
-            setCor('');
-            setQuantidade('');
-            setTeorAlcool('');
-            setTemperatura('');
+          const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/bebidas/${params.id}`);
+          if (response.ok) {
+            const bebidaData = await response.json();
+            setNome(bebidaData.nome || '');
+            setCor(bebidaData.cor || '');
+            setQuantidade(bebidaData.quantidade || '');
+            setTeorAlcool(bebidaData.teorAlcool || '');
+            setTemperatura(bebidaData.temperatura || '');
+          }
         } catch (error) {
-            console.log(error);
+          console.error(error);
         }
+      };
+
+      fetchBebida();
+    } else {
+      setBebidaId(undefined);
+      setNome('');
+      setCor('');
+      setQuantidade('');
+      setTeorAlcool('');
+      setTemperatura('');
     }
+  }, [params.id]);
 
-    return (
-        <View style={styles.container}>
-            <TextInput
-                style={styles.input}
-                value={nome}
-                onChangeText={setNome}
-                inputMode='text'
-                placeholder='Digite o nome'
-                placeholderTextColor={'#428df5'}
-            />
+  const handleSave = async () => {
+    const method = bebidaId ? 'PUT' : 'POST';
+    const url = bebidaId
+      ? `${process.env.EXPO_PUBLIC_API_URL}/bebidas/${bebidaId}`
+      : `${process.env.EXPO_PUBLIC_API_URL}/bebidas`;
 
-            <TextInput
-                style={styles.input}
-                value={quantidade}
-                onChangeText={setQuantidade}
-                inputMode='text'
-                placeholder='Digite a quantidade'
-                placeholderTextColor={'#428df5'}
-            />
+    try {
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome, cor, quantidade, teorAlcool, temperatura }),
+      });
 
-            <TextInput
-                style={styles.input}
-                value={teorAlcool}
-                onChangeText={setTeorAlcool}
-                inputMode='text'
-                placeholder='Digite a quantidade de Álcool'
-                placeholderTextColor={'#428df5'}
-            />
+      if (response.ok) {
+        setBebidaId(undefined);
+        setNome('');
+        setCor('');
+        setQuantidade('');
+        setTeorAlcool('');
+        setTemperatura('');
+        router.replace('/bebidas/listaBebidas');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
-            <TextInput
-                style={styles.input}
-                value={temperatura}
-                onChangeText={setTemperatura}
-                inputMode='text'
-                placeholder='Digite a temperatura'
-                placeholderTextColor={'#428df5'}
-            />
-            
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleSubmit}>
-                    <Text style={styles.text}>Salvar</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <Text style={styles.title}>{bebidaId ? 'Editar Bebida' : 'Cadastrar Bebida'}</Text>
+
+        <Text style={styles.label}>Nome:</Text>
+        <TextInput
+          style={styles.input}
+          value={nome}
+          onChangeText={setNome}
+          placeholder="Digite o nome"
+          placeholderTextColor="#888"
+        />
+
+        <Text style={styles.label}>Cor:</Text>
+        <TextInput
+          style={styles.input}
+          value={cor}
+          onChangeText={setCor}
+          placeholder="Digite a cor"
+          placeholderTextColor="#888"
+        />
+
+        <Text style={styles.label}>Quantidade:</Text>
+        <TextInput
+          style={styles.input}
+          value={quantidade}
+          onChangeText={setQuantidade}
+          keyboardType="numeric"
+          placeholder="Digite a quantidade"
+          placeholderTextColor="#888"
+        />
+
+        <Text style={styles.label}>Teor Alcoólico:</Text>
+        <TextInput
+          style={styles.input}
+          value={teorAlcool}
+          onChangeText={setTeorAlcool}
+          keyboardType="numeric"
+          placeholder="Digite o teor alcoólico"
+          placeholderTextColor="#888"
+        />
+
+        <Text style={styles.label}>Temperatura:</Text>
+        <TextInput
+          style={styles.input}
+          value={temperatura}
+          onChangeText={setTemperatura}
+          keyboardType="numeric"
+          placeholder="Digite a temperatura"
+          placeholderTextColor="#888"
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <Text style={styles.buttonText}>{bebidaId ? 'Atualizar' : 'Salvar'}</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#3c3c3c',
-        justifyContent: 'flex-start',
-        marginTop: 30,
-    },
-    input: {
-        backgroundColor: '#fff',
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: 10,
-        fontSize: 16,
-        marginBottom: 20,
-    },
-    buttonContainer: {
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    button: {
-        alignItems: 'center',
-        backgroundColor: '#1E90FF',
-        padding: 10,
-        width: 120,
-        borderRadius: 10,
-        borderColor: '#FFF'
-    },
-    text: {
-        color: '#FFF',
-    }
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#3c3c3c',
+  },
+  scrollContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFF',
+    marginBottom: 20,
+  },
+  label: {
+    alignSelf: 'flex-start',
+    fontSize: 16,
+    fontWeight: '500',
+    marginBottom: 8,
+    color: '#FFF',
+  },
+  input: {
+    backgroundColor: '#555',
+    borderColor: '#777',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 16,
+    color: '#FFF',
+    width: '100%',
+  },
+  button: {
+    backgroundColor: '#1E90FF',
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+    width: '100%',
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
