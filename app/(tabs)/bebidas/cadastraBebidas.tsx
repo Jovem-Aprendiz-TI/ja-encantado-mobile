@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 export default function CadastraBebidas() {
@@ -73,7 +73,7 @@ export default function CadastraBebidas() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Text style={styles.title}>{bebidaId ? 'Editar Bebida' : 'Cadastrar Bebida'}</Text>
 
@@ -129,7 +129,7 @@ export default function CadastraBebidas() {
           <Text style={styles.buttonText}>{bebidaId ? 'Atualizar' : 'Salvar'}</Text>
         </TouchableOpacity>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

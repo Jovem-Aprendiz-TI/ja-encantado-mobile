@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList, RefreshControl, SafeAreaView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, FlatList, RefreshControl } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import BebidaItem from '@/components/BebidaItem';
 import RefreshButton from '@/components/RefreshButton';
@@ -47,7 +47,7 @@ const BebidasScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <View style={styles.container}>
         <Header
           url="https://cdn.pixabay.com/photo/2013/11/12/01/29/bar-209148_640.jpg"
@@ -73,7 +73,7 @@ const BebidasScreen: React.FC = () => {
         />
         <RefreshButton onRefresh={handleRefresh} />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
