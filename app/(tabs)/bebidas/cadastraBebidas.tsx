@@ -3,23 +3,32 @@ import { StyleSheet, View, TextInput, TouchableOpacity, Text } from 'react-nativ
 
 export default function CadastraBebidas() {
     const [nome, setNome] = useState('');
-    const [dataNascimento, setDataNascimento] = useState('');
+    const [cor, setCor] = useState('');
+    const [quantidade, setQuantidade] = useState('');
+    const [teorAlcool, setTeorAlcool] = useState('');
+    const [temperatura, setTemperatura] = useState('');
 
     const handleSubmit = async () => {
         try {
-            await fetch(`${process.env.EXPO_PUBLIC_API_URL}/pessoas`, {
+            await fetch(`${process.env.EXPO_PUBLIC_API_URL}/bebidas`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     "nome": nome,
-                    "dataNascimento": dataNascimento
+                    "cor": cor,
+                    "quantidade": quantidade,
+                    "teorAlcool": teorAlcool,
+                    "temperatura": temperatura
                 })
             });
 
             setNome('');
-            setDataNascimento('');
+            setCor('');
+            setQuantidade('');
+            setTeorAlcool('');
+            setTemperatura('');
         } catch (error) {
             console.log(error);
         }
@@ -32,16 +41,34 @@ export default function CadastraBebidas() {
                 value={nome}
                 onChangeText={setNome}
                 inputMode='text'
-                placeholder='Digite o nome da pessoa'
+                placeholder='Digite o nome'
                 placeholderTextColor={'#428df5'}
             />
 
             <TextInput
                 style={styles.input}
-                value={dataNascimento}
-                onChangeText={setDataNascimento}
+                value={quantidade}
+                onChangeText={setQuantidade}
                 inputMode='text'
-                placeholder='Digite a data de nascimento da pessoa'
+                placeholder='Digite a quantidade'
+                placeholderTextColor={'#428df5'}
+            />
+
+            <TextInput
+                style={styles.input}
+                value={teorAlcool}
+                onChangeText={setTeorAlcool}
+                inputMode='text'
+                placeholder='Digite a quantidade de Álcool'
+                placeholderTextColor={'#428df5'}
+            />
+
+            <TextInput
+                style={styles.input}
+                value={temperatura}
+                onChangeText={setTemperatura}
+                inputMode='text'
+                placeholder='Digite a temperatura'
                 placeholderTextColor={'#428df5'}
             />
             
