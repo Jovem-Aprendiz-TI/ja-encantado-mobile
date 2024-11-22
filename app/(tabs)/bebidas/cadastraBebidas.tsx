@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, View } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useGlobalSearchParams } from 'expo-router';
 
 export default function CadastraBebidas() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ id?: string }>();
+  const params = useGlobalSearchParams<{ id?: string }>();
 
   const [bebidaId, setBebidaId] = useState<string | undefined>(params.id);
   const [nome, setNome] = useState('');
