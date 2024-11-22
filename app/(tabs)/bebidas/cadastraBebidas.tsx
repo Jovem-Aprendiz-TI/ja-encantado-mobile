@@ -120,7 +120,6 @@ export default function CadastraBebidas() {
           style={styles.input}
           value={temperatura}
           onChangeText={setTemperatura}
-          keyboardType="numeric"
           placeholder="Digite a temperatura"
           placeholderTextColor="#888"
         />
